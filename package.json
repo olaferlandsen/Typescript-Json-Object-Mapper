@@ -1,9 +1,12 @@
 {
     "name": "typescript-json-object-mapper",
-    "version": "1.1.0",
+    "version": "1.1.4",
     "description": "Json Object mapper writing in TypeScript",
     "main": "dist/index.js",
-    "scripts": {},
+    "typings": "dist/index.d.ts",
+    "scripts": {
+        "test": "mocha --compilers ts:ts-node/register ./tests/*.spec.ts"
+    },
     "repository": "git+https://github.com/olaferlandsen/Typescript-Json-Object-Mapper.git",
     "author": "Olaf Erlandsen <olaftriskel@gmail.com>",
     "license": "MIT",
@@ -41,6 +44,5 @@
         "tom",
         "tsom",
         "jsom"
-    ],
-    "typings": "dist/index.d.ts"
+    ]
 }

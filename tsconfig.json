@@ -9,7 +9,8 @@
         "lib": ["es6"],
         "moduleResolution": "node",
         "sourceMap": true,
-        "declaration": true
+        "declaration": true,
+        "outDir": "dist/"
     },
     "include": [ "src/**/*.ts" ],
     "exclude": [ "node_modules" ]
