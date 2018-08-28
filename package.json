@@ -1,8 +1,8 @@
 {
     "name": "typescript-json-object-mapper",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Json Object mapper writing in TypeScript",
-    "main": "dist/TypescriptJsonObjectMapper.js",
+    "main": "dist/index.js",
     "scripts": {},
     "repository": "git+https://github.com/olaferlandsen/Typescript-Json-Object-Mapper.git",
     "author": "Olaf Erlandsen <olaftriskel@gmail.com>",

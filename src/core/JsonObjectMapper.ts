@@ -62,4 +62,7 @@ export class JsonObjectMapper {
         };
         return new Serialization(filter(args[1], args[0]));
     }
+    public static serializeArray(dataArray: any[], view: typeof JsonView): Serialization {
+        return new Serialization(dataArray.map(data => JsonObjectMapper.serialize(data, view).toJson()));
+    }
 }
