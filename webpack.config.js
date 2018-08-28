@@ -1,15 +1,19 @@
 const nodeExternals = require('webpack-node-externals');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
-    devtool: false,
+    target: "node",
     mode: "production",
     entry: __dirname + '/src/index.ts',
     externals: [nodeExternals()],
+    devtool: 'source-map',
+
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
+                test: /\.ts(x?)$/,
                 loader: 'ts-loader',
                 exclude: [
                     /node_modules/,
@@ -20,10 +24,10 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.ts', '.tsx','.webpack.js', '.web.js', '.js']
     },
     output: {
-        filename: 'bundle.js',
+        filename: 'index.js',
         path: __dirname + '/dist',
         libraryTarget: 'umd',
         library: 'TypescriptJsonObjectMapper',
@@ -51,5 +55,8 @@ module.exports = {
                 keep_classnames: false
             }
         })]
-    }
+    },
+    plugins: [
+        new CleanWebpackPlugin(["./dist"], {verbose: false})
+    ]
 };

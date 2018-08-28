@@ -11,6 +11,7 @@ interface IJsonPropertyStored {
     format?: string;
     required?: boolean;
 }
+
 export interface IJsonProperty {
     name?: string;
     view?: [typeof JsonView]|typeof JsonView;
