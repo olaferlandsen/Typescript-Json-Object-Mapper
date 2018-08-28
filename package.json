@@ -1,0 +1,42 @@
+{
+    "name": "typescript-json-object-mapper",
+    "version": "1.0.0",
+    "description": "Json Object mapper writing in TypeScript",
+    "main": "dist/bundle.js",
+    "scripts": {},
+    "repository": "git+https://github.com/olaferlandsen/Typescript-Json-Object-Mapper.git",
+    "author": "Olaf Erlandsen <olaftriskel@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/olaferlandsen/Typescript-Json-Object-Mapper/issues"
+    },
+    "homepage": "https://github.com/olaferlandsen/Typescript-Json-Object-Mapper#readme",
+    "devDependencies": {
+        "@types/mocha": "^5.2.5",
+        "@types/node": "^10.9.0",
+        "mocha": "^5.2.0",
+        "ts-loader": "^4.5.0",
+        "typescript": "^3.0.1",
+        "webpack": "^4.17.1",
+        "webpack-node-externals": "^1.7.2"
+    },
+    "dependencies": {
+        "reflect-metadata": "^0.1.12"
+    },
+    "keywords": [
+        "typescript",
+        "ts",
+        "javascript",
+        "js",
+        "object-mapper",
+        "object",
+        "mapper",
+        "javascript-object-mapper",
+        "json",
+        "json-object-mapper",
+        "jom",
+        "tom",
+        "tsom",
+        "jsom"
+    ]
+}
