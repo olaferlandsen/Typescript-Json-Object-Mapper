@@ -1,5 +1,5 @@
 # (TypeScript) Json-Object-Mapper
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HEF7696BDQTDG)
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=HEF7696BDQTDG) [![Greenkeeper badge](https://badges.greenkeeper.io/olaferlandsen/Typescript-Json-Object-Mapper.svg)](https://greenkeeper.io/)
 
 This a simple package to mapping a json object.
 
