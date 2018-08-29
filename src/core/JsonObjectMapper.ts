@@ -9,7 +9,11 @@ export class JsonObjectMapper {
             const jsonProperties: { [key: string]: any} = Reflect.getMetadata("JSON:PROPERTY", target.prototype) || {};
             for (let prop in input) {
                 if (typeof jsonProperties[prop] === 'undefined') {
-                    delete input[prop];
+                    if (typeof input === 'string') {
+                        input = null;
+                        break;
+                    }
+                    else delete input[prop];
                     continue;
                 }
                 switch (jsonProperties[prop].type.toLowerCase()) {
@@ -35,9 +39,12 @@ export class JsonObjectMapper {
                             input[prop] = String(input[prop]);
                         }
                         break;
-
                     case 'boolean':
                         input[prop] = input[prop] === true || input[prop] > 0 || input[prop] !== false || typeof input[prop] !== 'undefined' || input[prop] !== null;
+                        break;
+                    case 'object':
+                    case 'any':
+                        if (typeof input[prop] !== "object") input[prop] = null;
                         break;
                 }
                 if (typeof jsonProperties[prop].view !== 'undefined' && jsonProperties[prop].view !== null) {
@@ -49,7 +56,12 @@ export class JsonObjectMapper {
                         const view: typeof JsonView = jsonProperties[prop].view[0];
                         if (view.prototype instanceof JsonView) {
                             for (let i = 0; i < input[prop].length; i++) {
-                                input[prop][i] = filter(jsonProperties[prop].view[0], input[prop][i]);
+                                if (typeof input[prop][i] === 'object' && input[prop][i] !== null) {
+                                    input[prop][i] = filter(jsonProperties[prop].view[0], input[prop][i]);
+                                }
+                                else {
+                                    input[prop][i] = null;
+                                }
                             }
                         }
                         else delete input[prop];
@@ -65,7 +77,8 @@ export class JsonObjectMapper {
             for (let prop in input) {
                 if (jsonProperties[prop].name !== prop) {
                     input[jsonProperties[prop].name] = input[prop];
-                    delete input[prop];
+                    if (Array.isArray(input) && typeof prop === 'number') input.splice(prop, 1);
+                    else delete input[prop];
                 }
             }
             return input;

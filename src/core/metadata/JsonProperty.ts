@@ -26,7 +26,7 @@ export function JsonProperty (...args: any[]): void | Function {
         pre[args[1]] = {
             name: args[1],
             type: designType.name.toLowerCase(),
-            view: designType.name
+            // view: designType.name
         };
         Reflect.defineMetadata(KEY, pre, args[0]);
         return void 0;
@@ -39,7 +39,7 @@ export function JsonProperty (...args: any[]): void | Function {
             else options = args[0];
             let pre: { [key: string]: IJsonProperty } = Reflect.getMetadata(KEY, params[0]) || {};
             pre[params[1]] = {
-                view: designType.name,
+                // view: designType.name,
                 type: designType.name,
                 name: params[1],
                 ...options

@@ -34,7 +34,7 @@ module.exports = {
         umdNamedDefine: true
     },
     optimization: {
-        minimize: true,
+        minimize: false,
         minimizer: [new UglifyJsPlugin({
             extractComments: true,
             parallel: true,

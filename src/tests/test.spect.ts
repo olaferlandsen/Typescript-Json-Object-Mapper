@@ -1,6 +1,6 @@
 import "mocha";
-import { JsonObjectMapper, JsonProperty, JsonView } from '../src';
-import { JsonIgnore } from '../src/core/metadata/JsonIgnore';
+import { JsonObjectMapper, JsonProperty, JsonView } from '../index';
+import { JsonIgnore } from '../core/metadata/JsonIgnore';
 
 
 class DriverView extends JsonView {
@@ -43,6 +43,15 @@ class CarView extends JsonView {
     @JsonProperty([WheelsView])
     public wheels: WheelsView[];
 
+    @JsonProperty
+    public telefono: string[];
+
+    @JsonProperty
+    public objeto: object;
+
+    @JsonProperty
+    public cualquiera: any;
+
     @JsonProperty(DriverView)
     public driver: DriverView;
 }
@@ -54,6 +63,17 @@ const json =  {
     model: "lira",
     engine: "v8",
     traction: "4x4",
+    telefono: [
+        "a", "b", "c"
+    ],
+    objeto: {
+        a: [
+            2, 3, 4, 5
+        ]
+    },
+    cualquiera: {
+        a: { b: true}
+    },
     wheels: [
         {
             index: 0,
@@ -87,6 +107,7 @@ const json =  {
         active: true
     }
 };
+
 let x = JsonObjectMapper.serialize(json, CarView).toJson();
 console.log(x);
 
