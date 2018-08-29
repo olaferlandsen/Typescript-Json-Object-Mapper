@@ -1,17 +1,9 @@
 import { JsonView } from './JsonView';
-
-class Serialization {
-    public constructor (private serialized: any) {}
-    public toString (space = 4): string {
-        return JSON.stringify(this.serialized, null, space);
-    }
-    public toJson (): object {
-        return this.serialized;
-    }
-}
+import { Serialization } from './Serialization';
 
 export class JsonObjectMapper {
-    public static serialize(data: any, view: typeof JsonView): Serialization;
+    public static serialize (data: object[], view: typeof JsonView): Serialization;
+    public static serialize (data: object, view: typeof JsonView): Serialization;
     public static serialize (...args: any[]): Serialization {
         const filter: Function = (target: typeof JsonView, input: {[key: string]: any}): any => {
             const jsonProperties: { [key: string]: any} = Reflect.getMetadata("JSON:PROPERTY", target.prototype) || {};
@@ -20,7 +12,6 @@ export class JsonObjectMapper {
                     delete input[prop];
                     continue;
                 }
-                console.log("property", prop, jsonProperties[prop].type, input[prop]);
                 switch (jsonProperties[prop].type.toLowerCase()) {
                     case 'date':
                         if (typeof input[prop] === 'number') {
@@ -79,9 +70,11 @@ export class JsonObjectMapper {
             }
             return input;
         };
-        return new Serialization(filter(args[1], args[0]));
-    }
-    public static serializeArray(dataArray: any[], view: typeof JsonView): Serialization {
-        return new Serialization(dataArray.map(data => JsonObjectMapper.serialize(data, view).toJson()));
+        if (Array.isArray(args[0])) {
+            const elements: object[] = (args[0] as object[])
+                .map(data => JsonObjectMapper.serialize(data, args[1]).toJson());
+            return new Serialization(elements);
+        }
+        else return new Serialization(filter(args[1], args[0]));
     }
 }

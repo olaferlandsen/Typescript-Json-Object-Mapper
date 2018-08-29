@@ -3,14 +3,14 @@ import { JsonObjectMapper, JsonProperty, JsonView } from '../src';
 import { JsonIgnore } from '../src/core/metadata/JsonIgnore';
 
 
-class PersonView extends JsonView {
-    @JsonIgnore
+class DriverView extends JsonView {
+    @JsonProperty({type: 'string'}) // change DataType to string from integer
     id: number;
 
-    @JsonProperty
+    @JsonProperty({name: 'fullname'}) // Rename property to "fullname" from "name"
     name: string;
 
-    @JsonProperty
+    @JsonProperty({default: false})
     active: boolean;
 }
 class WheelsView extends JsonView {
@@ -40,13 +40,11 @@ class CarView extends JsonView {
     public engine: string;
     @JsonProperty
     public traction: string;
-    @JsonProperty({
-        view: [WheelsView]
-    })
+    @JsonProperty([WheelsView])
     public wheels: WheelsView[];
 
-    @JsonProperty(PersonView)
-    public driver: PersonView;
+    @JsonProperty(DriverView)
+    public driver: DriverView;
 }
 
 
