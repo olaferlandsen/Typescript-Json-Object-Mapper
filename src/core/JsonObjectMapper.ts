@@ -13,21 +13,26 @@ export class JsonObjectMapper {
                         input = null;
                         break;
                     }
-                    else delete input[prop];
+                    else {
+                        delete input[prop];
+                    }
+                    continue;
+                }
+                if (jsonProperties[prop].ignore === true) {
+                    delete input[prop];
                     continue;
                 }
                 switch (jsonProperties[prop].type.toLowerCase()) {
                     case 'date':
                         if (typeof input[prop] === 'number') {
                             input[prop] = new Date(input[prop]);
-                        }
-                        else if (typeof input[prop] === 'string') {
+                        } else if (typeof input[prop] === 'string') {
                             input[prop] = new Date(Date.parse(input[prop]));
-                        }
-                        else if (input[prop] instanceof Date) {
+                        } else if (input[prop] instanceof Date) {
                             continue;
+                        } else {
+                            input[prop] = null;
                         }
-                        else input[prop] = null;
                         break;
                     case 'number':
                         if (typeof input[prop] !== 'number') {
@@ -43,9 +48,6 @@ export class JsonObjectMapper {
                         input[prop] = input[prop] === true || input[prop] > 0 || input[prop] !== false || typeof input[prop] !== 'undefined' || input[prop] !== null;
                         break;
                     case 'object':
-                    case 'any':
-                        if (typeof input[prop] !== "object") input[prop] = null;
-                        break;
                 }
                 if (typeof jsonProperties[prop].view !== 'undefined' && jsonProperties[prop].view !== null) {
                     if (Array.isArray(jsonProperties[prop].view)) {
@@ -53,32 +55,34 @@ export class JsonObjectMapper {
                             delete input[prop];
                             continue;
                         }
-                        const view: typeof JsonView = jsonProperties[prop].view[0];
-                        if (view.prototype instanceof JsonView) {
+                        if (jsonProperties[prop].view[0].prototype instanceof JsonView) {
                             for (let i = 0; i < input[prop].length; i++) {
                                 if (typeof input[prop][i] === 'object' && input[prop][i] !== null) {
                                     input[prop][i] = filter(jsonProperties[prop].view[0], input[prop][i]);
-                                }
-                                else {
+                                } else {
                                     input[prop][i] = null;
                                 }
                             }
+                        } else {
+                            delete input[prop];
                         }
-                        else delete input[prop];
-                    }
-                    else if (jsonProperties[prop].view.prototype instanceof JsonView) {
+                    } else if (jsonProperties[prop].view.prototype instanceof JsonView) {
                         input[prop] = filter(jsonProperties[prop].view, input[prop]);
-                    }
-                    else {
+                    } else {
                         // input[prop] = null;
                     }
                 }
             }
             for (let prop in input) {
                 if (jsonProperties[prop].name !== prop) {
+                    // change name of property
                     input[jsonProperties[prop].name] = input[prop];
-                    if (Array.isArray(input) && typeof prop === 'number') input.splice(prop, 1);
-                    else delete input[prop];
+                    if (Array.isArray(input) && typeof prop === 'number') {
+                        input.splice(prop, 1);
+                    }
+                    else {
+                        delete input[prop];
+                    }
                 }
             }
             return input;
@@ -87,7 +91,8 @@ export class JsonObjectMapper {
             const elements: object[] = (args[0] as object[])
                 .map(data => JsonObjectMapper.serialize(data, args[1]).toJson());
             return new Serialization(elements);
+        } else {
+            return new Serialization(filter(args[1], args[0]));
         }
-        else return new Serialization(filter(args[1], args[0]));
     }
 }

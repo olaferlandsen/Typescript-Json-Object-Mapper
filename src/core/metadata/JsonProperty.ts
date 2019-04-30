@@ -11,6 +11,7 @@ export interface IJsonProperty {
     validator?: RegExp | string;
     format?: string;
     required?: boolean;
+    ignore?: boolean;
 }
 export function JsonProperty (view: typeof JsonView | [typeof JsonView]): Function;
 export function JsonProperty (options: IJsonProperty): Function;
@@ -23,10 +24,11 @@ export function JsonProperty (...args: any[]): void | Function {
     if (args.length > 2) {
         const designType  = Reflect.getMetadata("design:type", args[0], args[1]);
         let pre: { [key: string]: IJsonProperty } = Reflect.getMetadata(KEY, args[0]) || {};
+
         pre[args[1]] = {
+            ...pre[args[1]],
             name: args[1],
-            type: designType.name.toLowerCase(),
-            // view: designType.name
+            type: designType.name.toLowerCase()
         };
         Reflect.defineMetadata(KEY, pre, args[0]);
         return void 0;
@@ -39,6 +41,7 @@ export function JsonProperty (...args: any[]): void | Function {
             else options = args[0];
             let pre: { [key: string]: IJsonProperty } = Reflect.getMetadata(KEY, params[0]) || {};
             pre[params[1]] = {
+                ...pre[params[1]],
                 // view: designType.name,
                 type: designType.name,
                 name: params[1],

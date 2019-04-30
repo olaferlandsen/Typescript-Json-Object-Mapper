@@ -7,154 +7,62 @@ This a simple package to mapping a json object.
 ## Getting Started
 ### Install
 ```bash
-npm install --save typescript-json-object-mapper
+npm install typescript-json-object-mapper
 ```
-### Import
+```bash
+yarn add typescript-json-object-mapper
 ```
-import { JsonProperty, JsonIgnore, JsonView, JsonObjectMapper } from 'typescript-json-object-mapper';
+### Configure
+To work with decorators, you need first enable `emitDecoratorMetadata` y `experimentalDecorators` on you `tsconfig.json`.
+Example:
+```json
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        ...
+    }
+    ...
+}
 ```
-
 ### Create you own Views
 This example tries to show all possible cases in which you might need to use this utility.
 
 ```typescript
-import { JsonProperty, JsonIgnore, JsonView } from 'typescript-json-object-mapper';
-
-class DriverView extends JsonView {
+class UserView extends JsonView {
     @JsonProperty
-    public id: number;
-    @JsonProperty({
-        name: "fullname"
-    })
-    public name: number; // Rename property
+    username: string;
+    
     @JsonProperty
-    public email: string;
     @JsonIgnore
-    public password: string;
-}
-class WheelsView extends JsonView {
-    @JsonProperty({
-        type: "string"
-    })
-    public index: number;// Convert int to string value
-    @JsonProperty
-    public vendor: string;
-    @JsonProperty
-    public size: number;
-    @JsonProperty
-    public timestamp: Date;
-}
-class CarView extends JsonView {
-    @JsonProperty
-    public name: string;
-    @JsonProperty
-    public vendor: string;
-    @JsonProperty
-    public model: string;
-    @JsonIgnore
-    public engine: string; // Ignore property(don't show)
-    @JsonProperty
-    public traction: string;
-    @JsonProperty ([WheelsView])
-    public wheels: WheelsView[];// Sub-View Array
-    @JsonProperty (DriverView)
-    public driver: DriverView;// Sub-View Object
+    password: string;
 }
 ```
 
 ### Define you data object
 ```typescript
-const json: any = {
-    name: "cautito",
-    vendor: "citroen",
-    model: "lira",
-    engine: "v8",
-    traction: "4x4",
-    wheels: [ // Array of object's
-        {
-            index: 0,
-            vendor: "pirelli",
-            size: 26,
-            timestamp: new Date() // date as object
-        },
-        {
-            index: 1,
-            vendor: "firestone",
-            size: 26,
-            timestamp: 1535465061 // date as integer
-        },
-        {
-            index: 2,
-            vendor: "pirelli",
-            size: 26,
-            timestamp: "Tue, 28 Aug 2018 17:03:56 GMT" // date as string
-        },
-        {
-            index: 3,
-            vendor: "pirelli",
-            size: 10,
-            timestamp: "Tue, 28 Aug 2018 17:03:56 GMT"
-        }
-    ],
-    driver: {
-        id: 1,
-        name: "John Smith",
-        email: "john.smith@example.com",
-        password: "12345678"
-    }
+const json = {
+    username: "annon",
+    password: "12345678",
+    birthday: new Date()
 };
 ```
 ### Serilize
 ```typescript
-const serialized = JsonObjectMapper.serialize(json, CarView).toString();
+const serialized = JsonObjectMapper.serialize(json, UserView).toString();
 ```
 
 ### Result
 ```json
 {
-    "name": "cautito",
-    "vendor": "citroen",
-    "model": "lira",
-    "engine": "v8",
-    "traction": "4x4",
-    "wheels": [
-        {
-            "vendor": "pirelli",
-            "size": 26,
-            "timestamp": "2018-08-28T18:11:44.204Z",
-            "index": "0"
-        },
-        {
-            "vendor": "firestone",
-            "size": 26,
-            "timestamp": "1970-01-18T18:31:05.061Z",
-            "index": "1"
-        },
-        {
-            "vendor": "pirelli",
-            "size": 26,
-            "timestamp": "2018-08-28T17:03:56.000Z",
-            "index": "2"
-        },
-        {
-            "vendor": "pirelli",
-            "size": 10,
-            "timestamp": "2018-08-28T17:03:56.000Z",
-            "index": "3"
-        }
-    ],
-    "driver": {
-        "id": "1",
-        "fullname": "John Smith",
-        "email": "john.smith@example.com"
-    }
+    "username": "annon"
 }
 ```
 
 ## Features
 * [x] No-Initiation(Using only reference to class)
 * [x] Renaming properties
-* [x] Convert data types
+* [x] Change data types
     * [x] to Date
         * [x] from String using `Date.parse`
         * [x] from Integer using `Date`
@@ -163,23 +71,16 @@ const serialized = JsonObjectMapper.serialize(json, CarView).toString();
     * [x] to Float
         * [x] from String using `Number`
     * [x] to Boolean
+    * [x] to String
+    * [x] to Object
 * [x] Sub-Views(Recursivity)
     * [x] Array sub-views
     * [x] Single sub-view
-* [x] Date values
+* [x] Date values(String, Number, Date)
 * [x] Serialize from `Object Array`
 * [x] Serialize from `Object`
-
-## ToDo
-* [ ] Deserialize
-* [ ] Custom Regex validator
-* [ ] Custom format value
-* [ ] Default values
-* [ ] Enum values
-    * [ ] String
-    * [ ] Number
-    * [ ] Boolean
-
+* [x] Serialize from `String`
+* [ ] Property Topic
 
 ## API:
 
