@@ -43,8 +43,7 @@ class UserView extends JsonView {
 ```typescript
 const json = {
     username: "annon",
-    password: "12345678",
-    birthday: new Date()
+    password: "12345678"
 };
 ```
 ### Serilize
