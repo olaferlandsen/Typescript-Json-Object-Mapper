@@ -28,7 +28,7 @@ module.exports = {
     },
     output: {
         filename: 'index.js',
-        path: __dirname + '/dist',
+        path: __dirname + '/build',
         libraryTarget: 'umd',
         library: 'TypescriptJsonObjectMapper',
         umdNamedDefine: true

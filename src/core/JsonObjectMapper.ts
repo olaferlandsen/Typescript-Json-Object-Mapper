@@ -5,7 +5,7 @@ export class JsonObjectMapper {
     public static serialize (data: object[], view: typeof JsonView): Serialization;
     public static serialize (data: object, view: typeof JsonView): Serialization;
     public static serialize (...args: any[]): Serialization {
-        const filter: Function = (target: typeof JsonView, input: {[key: string]: any}): any => {
+        const filter: Function = (target: typeof JsonView, input: any): any => {
             const jsonProperties: { [key: string]: any} = Reflect.getMetadata("JSON:PROPERTY", target.prototype) || {};
             for (let prop in input) {
                 if (typeof jsonProperties[prop] === 'undefined') {
