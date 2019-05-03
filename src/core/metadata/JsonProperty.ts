@@ -12,6 +12,7 @@ export interface IJsonProperty {
     format?: string;
     required?: boolean;
     ignore?: boolean;
+    topic?: string;
 }
 export function JsonProperty (view: typeof JsonView | [typeof JsonView]): Function;
 export function JsonProperty (options: IJsonProperty): Function;

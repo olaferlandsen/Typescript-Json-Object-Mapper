@@ -30,9 +30,10 @@ module.exports = {
         filename: 'index.js',
         path: __dirname + '/build',
         libraryTarget: 'umd',
-        library: 'TypescriptJsonObjectMapper',
+        library: 'tjom',
         umdNamedDefine: true
     },
+
     optimization: {
         minimize: false,
         minimizer: [new UglifyJsPlugin({
@@ -43,20 +44,18 @@ module.exports = {
             uglifyOptions: {
                 comments: false,
                 warnings: false,
-                compress: {
-                    global_defs: {"@alert": "console.log",},
-                    drop_console: true
-                },
+                compress: true,
                 mangle: true,
                 toplevel: false,
                 ie8: false,
                 safari10: false,
-                keep_fnames: false,
-                keep_classnames: false
+                keep_fnames: true,
+                keep_classnames: true
             }
         })]
     },
+
     plugins: [
-        new CleanWebpackPlugin(["./dist"], {verbose: false})
+        new CleanWebpackPlugin(["./build"], {verbose: false})
     ]
 };

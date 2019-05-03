@@ -19,10 +19,8 @@ Example:
 {
     "compilerOptions": {
         "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        ...
+        "experimentalDecorators": true
     }
-    ...
 }
 ```
 ### Create you own Views
@@ -33,9 +31,19 @@ class UserView extends JsonView {
     @JsonProperty
     username: string;
     
-    @JsonProperty
-    @JsonIgnore
+    @JsonProperty({
+        ignore: true
+    })
     password: string;
+    
+    @JsonProperty({
+        topic: 'custom'
+    })
+    birthday: string;
+    @JsonProperty({
+        topic: 'custom2'
+    })
+    phone: string;
 }
 ```
 
@@ -43,18 +51,46 @@ class UserView extends JsonView {
 ```typescript
 const json = {
     username: "annon",
-    password: "12345678"
+    password: "12345678",
+    birthday: "1992-03-20",
+    phone: "+0123456789"
 };
 ```
-### Serilize
+### Serilize(without topic's)
 ```typescript
 const serialized = JsonObjectMapper.serialize(json, UserView).toString();
 ```
-
-### Result
+results:
 ```json
 {
-    "username": "annon"
+    username: "annon",
+    birthday: "1992-03-20",
+    phone: "+0123456789"
+}
+```
+
+### Serilize(with topic)
+```typescript
+const serialized = JsonObjectMapper.serialize(json, UserView, ['custom']).toString();
+```
+results:
+```json
+{
+    username: "annon",
+    birthday: "1992-03-20"
+}
+```
+
+### Serilize(with topic)
+```typescript
+const serialized = JsonObjectMapper.serialize(json, UserView, ['custom', 'custom2']).toString();
+```
+results:
+```json
+{
+    username: "annon",
+    birthday: "1992-03-20",
+    phone: "+0123456789"
 }
 ```
 
@@ -79,7 +115,7 @@ const serialized = JsonObjectMapper.serialize(json, UserView).toString();
 * [x] Serialize from `Object Array`
 * [x] Serialize from `Object`
 * [x] Serialize from `String`
-* [ ] Property Topic
+* [x] Property Topic's
 
 ## API:
 

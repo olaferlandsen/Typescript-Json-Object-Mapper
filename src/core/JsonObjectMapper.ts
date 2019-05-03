@@ -2,9 +2,15 @@ import { JsonView } from './JsonView';
 import { Serialization } from './Serialization';
 
 export class JsonObjectMapper {
-    public static serialize (data: object[], view: typeof JsonView): Serialization;
-    public static serialize (data: object, view: typeof JsonView): Serialization;
+    public static serialize (data: object[] | object, view: typeof JsonView): Serialization;
+    public static serialize (data: object[] | object, view: typeof JsonView, topic: string|string[]): Serialization;
     public static serialize (...args: any[]): Serialization {
+        let immutably;
+        if (Array.isArray(args[0])) {
+            immutably = args[0].slice();
+        } else {
+            immutably = {...args[0]};
+        }
         const filter: Function = (target: typeof JsonView, input: any): any => {
             const jsonProperties: { [key: string]: any} = Reflect.getMetadata("JSON:PROPERTY", target.prototype) || {};
             for (let prop in input) {
@@ -18,6 +24,23 @@ export class JsonObjectMapper {
                     }
                     continue;
                 }
+
+                // topic filter
+                if (typeof args[2] === "string" || Array.isArray(args[2])) {
+                    if (jsonProperties[prop].topic && jsonProperties[prop].topic.length > 0) {
+                        // serialize topic is string, convert it to string-array
+                        if (typeof args[2] === "string") {
+                            args[2] = [args[2]];
+                        }
+
+                        // and now, if the current property not have som topic...
+                        if (args[2].indexOf(jsonProperties[prop].topic) === -1) {
+                            delete input[prop];
+                            continue;
+                        }
+                    }
+                }
+
                 if (jsonProperties[prop].ignore === true) {
                     delete input[prop];
                     continue;
@@ -87,12 +110,14 @@ export class JsonObjectMapper {
             }
             return input;
         };
-        if (Array.isArray(args[0])) {
-            const elements: object[] = (args[0] as object[])
-                .map(data => JsonObjectMapper.serialize(data, args[1]).toJson());
-            return new Serialization(elements);
+        let result;
+        if (Array.isArray(immutably)) {
+            result = (immutably as object[])
+                .map(data =>
+                    JsonObjectMapper.serialize(data, args[1], args[2]).toJson());
         } else {
-            return new Serialization(filter(args[1], args[0]));
+            result = filter(args[1], immutably);
         }
+        return new Serialization(result);
     }
 }
