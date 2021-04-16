@@ -22,7 +22,7 @@
         "@types/node": "10.9.2",
         "chai": "^4.2.0",
         "clean-webpack-plugin": "^0.1.19",
-        "copy-webpack-plugin": "^4.5.2",
+        "copy-webpack-plugin": "^5.0.0",
         "mocha": "^6.1.4",
         "ts-loader": "^4.5.0",
         "ts-node": "^8.1.0",
